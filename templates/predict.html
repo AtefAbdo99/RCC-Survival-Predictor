@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCC Survival Predictor - Prediction</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body class="light-mode">
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="{{ url_for('static', filename='hospital.jpg') }}" alt="RCC Logo" width="30" height="30" class="d-inline-block align-top me-2">
+                    RCC Survival Predictor
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#features">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#contact">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main class="container mt-5">
+            <div class="card p-4 shadow animate__animated animate__fadeIn">
+                <h1 class="text-center mb-4">Predict RCC Overall Survival</h1>
+                <form action="/predict" method="post" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="age" class="form-label">Age:</label>
+                            <input type="number" class="form-control" id="age" name="age" required>
+                            <div class="form-text">Enter the age of the patient in years.</div>
+                            <div class="invalid-feedback">Please provide a valid age.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="sex" class="form-label">Sex:</label>
+                            <select class="form-select" id="sex" name="sex" required>
+                                <option value="">Choose...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid sex.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="race" class="form-label">Race:</label>
+                            <select class="form-select" id="race" name="race" required>
+                                <option value="">Choose...</option>
+                                <option value="white">White</option>
+                                <option value="black">Black</option>
+                                <option value="asian">Asian</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid race.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ethnicity" class="form-label">Ethnicity:</label>
+                            <select class="form-select" id="ethnicity" name="ethnicity" required>
+                                <option value="">Choose...</option>
+                                <option value="hispanic">Hispanic</option>
+                                <option value="non-hispanic">Non-Hispanic</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid ethnicity.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="facility" class="form-label">Facility:</label>
+                            <select class="form-select" id="facility" name="facility" required>
+                                <option value="">Choose...</option>
+                                <option value="Community Cancer Program">Community Cancer Program</option>
+                                <option value="Comprehensive Community Cancer Program">Comprehensive Community Cancer Program</option>
+                                <option value="Academic/Research Program">Academic/Research Program</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid facility.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="grade" class="form-label">Grade:</label>
+                            <select class="form-select" id="grade" name="grade" required>
+                                <option value="">Choose...</option>
+                                <option value="Low grade">Low grade</option>
+                                <option value="Intermediate grade">Intermediate grade</option>
+                                <option value="High grade">High grade</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid grade.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="charlson_deyo_score" class="form-label">Charlson-Deyo Score:</label>
+                            <select class="form-select" id="charlson_deyo_score" name="charlson_deyo_score" required>
+                                <option value="">Choose...</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid Charlson-Deyo Score.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="insurance_status" class="form-label">Insurance Status:</label>
+                            <select class="form-select" id="insurance_status" name="insurance_status" required>
+                                <option value="">Choose...</option>
+                                <option value="Insured">Insured</option>
+                                <option value="Uninsured">Uninsured</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid insurance status.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="income" class="form-label">Income:</label>
+                            <input type="number" class="form-control" id="income" name="income" required>
+                            <div class="form-text">Enter the income of the patient.</div>
+                            <div class="invalid-feedback">Please provide a valid income.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="laterality" class="form-label">Laterality:</label>
+                            <select class="form-select" id="laterality" name="laterality" required>
+                                <option value="">Choose...</option>
+                                <option value="Right">Right</option>
+                                <option value="Left">Left</option>
+                                <option value="Bilateral">Bilateral</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid laterality.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="regional_nodes_positive" class="form-label">Regional Nodes Positive:</label>
+                            <input type="number" class="form-control" id="regional_nodes_positive" name="regional_nodes_positive" required>
+                            <div class="form-text">Enter the number of regional nodes positive.</div>
+                            <div class="invalid-feedback">Please provide a valid number of regional nodes positive.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="regional_nodes_examined" class="form-label">Regional Nodes Examined:</label>
+                            <input type="number" class="form-control" id="regional_nodes_examined" name="regional_nodes_examined" required>
+                            <div class="form-text">Enter the number of regional nodes examined.</div>
+                            <div class="invalid-feedback">Please provide a valid number of regional nodes examined.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lymph_vascular_invasion" class="form-label">Lymph Vascular Invasion:</label>
+                            <select class="form-select" id="lymph_vascular_invasion" name="lymph_vascular_invasion" required>
+                                <option value="">Choose...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid option.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="surgery" class="form-label">Surgery:</label>
+                            <select class="form-select" id="surgery" name="surgery" required>
+                                <option value="">Choose...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid option.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="radiotherapy" class="form-label">Radiotherapy:</label>
+                            <select class="form-select" id="radiotherapy" name="radiotherapy" required>
+                                <option value="">Choose...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid option.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="puf_vital_status" class="form-label">PUF Vital Status:</label>
+                            <select class="form-select" id="puf_vital_status" name="puf_vital_status" required>
+                                <option value="">Choose...</option>
+                                <option value="Alive">Alive</option>
+                                <option value="Deceased">Deceased</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a valid PUF vital status.</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mt-4">
+                        <i class="fas fa-calculator me-2"></i>Predict RCC Survival
+                    </button>
+                    <div id="loading" class="text-center mt-3" style="display:none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+        
+        <footer class="bg-dark text-white text-center py-3 mt-5">
+            <p>&copy; 2024 RCC Survival Predictor. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <button id="toggle-mode" class="btn btn-outline-primary position-fixed bottom-0 end-0 m-3">
+        <i class="fas fa-moon"></i>
+        <span class="ms-2">Switch to Dark Mode</span>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const body = document.body;
+            const toggleBtn = document.getElementById('toggle-mode');
+            const icon = toggleBtn.querySelector('i');
+            const text = toggleBtn.querySelector('span');
+
+            function setColorMode(mode) {
+                if (mode === 'dark') {
+                    body.classList.add('dark-mode');
+                    body.classList.remove('light-mode');
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    text.textContent = 'Switch to Light Mode';
+                } else {
+                    body.classList.add('light-mode');
+                    body.classList.remove('dark-mode');
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                    text.textContent = 'Switch to Dark Mode';
+                }
+            }
+
+            
+            const savedMode = localStorage.getItem('colorMode');
+            if (savedMode) {
+                setColorMode(savedMode);
+            }
+
+            
+            toggleBtn.addEventListener('click', function() {
+                const newMode = body.classList.contains('light-mode') ? 'dark' : 'light';
+                setColorMode(newMode);
+                localStorage.setItem('colorMode', newMode);
+            });
+
+            
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    } else {
+                        document.getElementById('loading').style.display = 'block';
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCC Survival Predictor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
+</head>
+<body class="light-mode">
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <img src="{{ url_for('static', filename='hospital.jpg') }}" alt="RCC Logo" width="30" height="30" class="d-inline-block align-top me-2">
+                    RCC Survival Predictor
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <header class="bg-primary text-white text-center py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder animate__animated animate__fadeInDown">RCC Survival Predictor</h1>
+                    <p class="lead fw-normal text-white-50 mb-0 animate__animated animate__fadeInUp animate__delay-1s">Empowering oncologists with AI-driven predictions</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="container mt-5">
+            <section id="intro" class="text-center mb-5">
+                <h2 class="mb-4 animate__animated animate__fadeIn">Welcome to RCC Survival Predictor</h2>
+                <p class="lead mb-4 animate__animated animate__fadeIn animate__delay-1s">This application predicts the overall survival (OS) in months for patients with Renal Cell Carcinoma (RCC) based on various clinical variables.</p>
+                <p class="mb-4 animate__animated animate__fadeIn animate__delay-2s">Our model is trained on historical RCC patient data using advanced machine learning techniques including Random Forest and Gradient Boosting.</p>
+                <button id="start-btn" class="btn btn-primary btn-lg animate__animated animate__pulse animate__infinite">
+                    Start RCC Survival Prediction
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </section>
+            
+            <section id="about" class="mb-5">
+                <h2 class="text-center mb-4">About RCC Survival Predictor</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>RCC Survival Predictor is a cutting-edge tool designed to assist oncologists and healthcare professionals in estimating overall survival rates for patients with Renal Cell Carcinoma.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>By leveraging machine learning algorithms, we provide accurate predictions based on a comprehensive set of clinical variables specific to RCC.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="features" class="mb-5">
+                <h2 class="text-center mb-4">Key Features</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-chart-line me-2"></i>Accurate Predictions</h5>
+                                <p class="card-text">Utilizing advanced machine learning models for precise survival estimations.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-user-md me-2"></i>Clinician-Friendly</h5>
+                                <p class="card-text">Designed with input from oncologists for ease of use in clinical settings.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-shield-alt me-2"></i>Data Security</h5>
+                                <p class="card-text">Ensuring patient data privacy and security with robust protection measures.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="contact" class="mb-5">
+                <h2 class="text-center mb-4">Contact Us</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <p class="text-center">If you have any questions about RCC Survival Predictor or need assistance, please don't hesitate to reach out to us.</p>
+                        <div class="d-flex justify-content-center">
+                            <a href="mailto:contact@rccpredictor.com" class="btn btn-outline-primary">
+                                <i class="fas fa-envelope me-2"></i>Contact Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="bg-dark text-white text-center py-3">
+            <p>&copy; 2024 RCC Survival Predictor. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <button id="toggle-mode" class="btn btn-outline-primary position-fixed bottom-0 end-0 m-3">
+        <i class="fas fa-moon"></i>
+        <span class="ms-2">Switch to Dark Mode</span>
+    </button>
+
+    <script>
+        document.getElementById('start-btn').addEventListener('click', function() {
+            window.location.href = "/predict";
+        });
+
+        document.getElementById('toggle-mode').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const icon = this.querySelector('i');
+            const text = this.querySelector('span');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                text.textContent = 'Switch to Light Mode';
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                text.textContent = 'Switch to Dark Mode';
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate__animated', 'animate__fadeIn');
+                }
+            });
+        });
+
+        document.querySelectorAll('section').forEach((section) => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
