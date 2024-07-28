@@ -3,167 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCC Survival Predictor</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
+    <title>RCC ImmunoPredict - Advanced Survival Prediction for mRCC Patients</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #17a2b8;
+            --light-bg: #ffffff;
+            --dark-bg: #121212;
+            --light-text: #000000;
+            --dark-text: #ffffff;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: var(--dark-bg) !important;
+            color: var(--dark-text) !important;
+        }
+        .navbar {
+            background-color: var(--light-bg) !important;
+            color: var(--light-text) !important;
+        }
+        .navbar-dark .navbar-nav .nav-link {
+            color: var(--light-text) !important;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--light-text) !important;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            opacity: 0.2;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: rgb(255, 255, 255);
+            transition: width 0.3s ease-in-out;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .btn-cta {
+            background-color: var(--secondary-color);
+            border: none;
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .section {
+            padding: 80px 0;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+        }
+        .dark-mode .navbar, .dark-mode .footer {
+            background-color: var(--dark-bg) !important;
+        }
+        .dark-mode .card {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .floating-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        h1, h2, h5 {
+            font-family: 'Arial Black', sans-serif;
+        }
+        p, a, .btn {
+            font-size: 1rem;
+        }
+        .navbar-brand img {
+            width: 70px;
+            height: 70px;
+        }
+    </style>
 </head>
-<body class="light-mode">
-    <div class="container-fluid p-0">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-            <div class="container">
-                <a class="navbar-brand" href="#">
-                    <img src="{{ url_for('static', filename='hospital.jpg') }}" alt="RCC Logo" width="30" height="30" class="d-inline-block align-top me-2">
-                    RCC Survival Predictor
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#about">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#features">Features</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#contact">Contact</a>
-                        </li>
-                    </ul>
-                </div>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ url_for('static', filename='hospital.png') }}" alt="RCC ImmunoPredict Logo" class="d-inline-block align-top me-3">
+                <span class="fs-4 fw-bold">RCC ImmunoPredict</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#development">Development</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <header class="bg-primary text-white text-center py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder animate__animated animate__fadeInDown">RCC Survival Predictor</h1>
-                    <p class="lead fw-normal text-white-50 mb-0 animate__animated animate__fadeInUp animate__delay-1s">Empowering oncologists with AI-driven predictions</p>
-                </div>
+    <div class="hero-section">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center hero-content">
+                <h1 class="display-4 fw-bolder animate__animated animate__fadeInDown">RCC ImmunoPredict</h1>
+                <p class="lead fw-normal mb-4 animate__animated animate__fadeInUp animate__delay-1s">Advanced Survival Prediction for mRCC Patients</p>
+                <a href="{{ url_for('predict') }}" class="btn btn-cta btn-lg animate__animated animate__fadeInUp animate__delay-2s">Start Your Prediction</a>
             </div>
-        </header>
-
-        <main class="container mt-5">
-            <section id="intro" class="text-center mb-5">
-                <h2 class="mb-4 animate__animated animate__fadeIn">Welcome to RCC Survival Predictor</h2>
-                <p class="lead mb-4 animate__animated animate__fadeIn animate__delay-1s">This application predicts the overall survival (OS) in months for patients with Renal Cell Carcinoma (RCC) based on various clinical variables.</p>
-                <p class="mb-4 animate__animated animate__fadeIn animate__delay-2s">Our model is trained on historical RCC patient data using advanced machine learning techniques including Random Forest and Gradient Boosting.</p>
-                <button id="start-btn" class="btn btn-primary btn-lg animate__animated animate__pulse animate__infinite">
-                    Start RCC Survival Prediction
-                    <i class="fas fa-arrow-right ms-2"></i>
-                </button>
-            </section>
-            
-            <section id="about" class="mb-5">
-                <h2 class="text-center mb-4">About RCC Survival Predictor</h2>
-                <div class="row">
-                    <div class="col-md-6">
-                        <p>RCC Survival Predictor is a cutting-edge tool designed to assist oncologists and healthcare professionals in estimating overall survival rates for patients with Renal Cell Carcinoma.</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p>By leveraging machine learning algorithms, we provide accurate predictions based on a comprehensive set of clinical variables specific to RCC.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section id="features" class="mb-5">
-                <h2 class="text-center mb-4">Key Features</h2>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title"><i class="fas fa-chart-line me-2"></i>Accurate Predictions</h5>
-                                <p class="card-text">Utilizing advanced machine learning models for precise survival estimations.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title"><i class="fas fa-user-md me-2"></i>Clinician-Friendly</h5>
-                                <p class="card-text">Designed with input from oncologists for ease of use in clinical settings.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title"><i class="fas fa-shield-alt me-2"></i>Data Security</h5>
-                                <p class="card-text">Ensuring patient data privacy and security with robust protection measures.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="contact" class="mb-5">
-                <h2 class="text-center mb-4">Contact Us</h2>
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <p class="text-center">If you have any questions about RCC Survival Predictor or need assistance, please don't hesitate to reach out to us.</p>
-                        <div class="d-flex justify-content-center">
-                            <a href="mailto:contact@rccpredictor.com" class="btn btn-outline-primary">
-                                <i class="fas fa-envelope me-2"></i>Contact Us
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-        
-        <footer class="bg-dark text-white text-center py-3">
-            <p>&copy; 2024 RCC Survival Predictor. All rights reserved.</p>
-        </footer>
+        </div>
     </div>
 
-    <button id="toggle-mode" class="btn btn-outline-primary position-fixed bottom-0 end-0 m-3">
-        <i class="fas fa-moon"></i>
-        <span class="ms-2">Switch to Dark Mode</span>
-    </button>
+    <div class="container mt-5" role="main">
+        <div id="about" class="section text-center mb-5">
+            <h2 class="mb-4" data-aos="fade-up">Welcome to RCC ImmunoPredict</h2>
+            <p class="lead" data-aos="fade-up" data-aos-delay="200">
+                Your cutting-edge tool for predicting survival outcomes in metastatic renal cell carcinoma (mRCC) patients undergoing first-line immune checkpoint inhibitor therapy.
+            </p>
+            <p data-aos="fade-up" data-aos-delay="400">
+                Leveraging advanced machine learning algorithms, RCC ImmunoPredict provides personalised survival predictions based on comprehensive data.
+            </p>
+        </div>
 
+        <div id="features" class="section mb-5">
+            <h2 class="text-center mb-4" data-aos="fade-up">Key Features</h2>
+            <div class="row">
+                <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <div class="feature-icon">📊</div>
+                            <h5 class="card-title">Precision Predictions</h5>
+                            <p class="card-text">Our tool utilises data-driven insights to offer accurate survival estimates tailored to individual patient profiles.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <div class="feature-icon">🔬</div>
+                            <h5 class="card-title">Comprehensive Analysis</h5>
+                            <p class="card-text">Incorporates a wide array of factors, including demographic data, clinical history, and pathological details, providing a holistic view of patient prognosis.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="600">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <div class="feature-icon">💻</div>
+                            <h5 class="card-title">User-Friendly Interface</h5>
+                            <p class="card-text">Designed for both clinicians and researchers, our easy-to-navigate platform integrates seamlessly into clinical workflows.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="development" class="section mb-5">
+            <h2 class="text-center mb-4" data-aos="fade-up">Development Insights</h2>
+            <div class="row">
+                <div class="col-md-12" data-aos="fade-up" data-aos-delay="200" style="font-size: large;">
+                    <p>
+                        RCC ImmunoPredict was meticulously developed using the extensive National Cancer Database (NCDB), which includes a rich dataset of mRCC patients treated with immune checkpoint inhibitors. Our expert team, comprising oncologists and data scientists, collaborated to train sophisticated machine-learning models on this data. This process involved rigorous validation and testing to ensure the tool's accuracy and reliability.
+                    </p>
+                    <p>
+                        The result is a powerful predictive tool that empowers healthcare professionals to make informed, evidence-based clinical decisions, enhancing patient care and outcomes.
+                    </p>
+                    <p class="fw-bold">
+                        We are excited to announce that the full text of our publication detailing the development and validation of RCC ImmunoPredict will be available soon.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="contact" class="section mb-5">
+            <h2 class="text-center mb-4" data-aos="fade-up">Contact Us</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <p class="text-center">
+                        If you have any questions about RCC ImmunoPredict or need assistance, please don't hesitate to reach out to us.
+                    </p>
+                    <div class="d-flex justify-content-center">
+                        <a href="mailto:Info@meddots.co.uk" class="btn btn-outline-primary btn-lg">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer text-center text-lg-start mt-5">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2024 RCC ImmunoPredict. All rights reserved.
+        </div>
+    </footer>
+
+    <button class="floating-button" id="modeToggle"><i class="fas fa-adjust"></i> Toggle Dark Mode</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
-        document.getElementById('start-btn').addEventListener('click', function() {
-            window.location.href = "/predict";
+        AOS.init({
+            duration: 1000,
+            once: true,
         });
 
-        document.getElementById('toggle-mode').addEventListener('click', function() {
+        document.getElementById('modeToggle').addEventListener('click', function() {
             document.body.classList.toggle('dark-mode');
-            const icon = this.querySelector('i');
-            const text = this.querySelector('span');
-            if (document.body.classList.contains('dark-mode')) {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-                text.textContent = 'Switch to Light Mode';
-            } else {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-                text.textContent = 'Switch to Dark Mode';
-            }
-        });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate__animated', 'animate__fadeIn');
-                }
-            });
-        });
-
-        document.querySelectorAll('section').forEach((section) => {
-            observer.observe(section);
         });
     </script>
 </body>

@@ -3,125 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCC Survival Predictor - Result</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
+    <title>RCC Survival Prediction Result</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #17a2b8;
+            --light-bg: #ffffff;
+            --dark-bg: #121212;
+            --light-text: #000000;
+            --dark-text: #ffffff;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: var(--dark-bg) !important;
+            color: var(--dark-text) !important;
+        }
+        .navbar {
+            background-color: var(--light-bg) !important;
+            color: var(--light-text) !important;
+        }
+        .navbar-dark .navbar-nav .nav-link {
+            color: var(--light-text) !important;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--light-text) !important;
+        }
+        .card {
+            border: none;
+        }
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+        }
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .floating-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        h1, h2 {
+            font-family: 'Arial Black', sans-serif;
+        }
+        .navbar-brand img {
+            width: 70px;
+            height: 70px;
+        }
+        .is-invalid {
+            border-color: red;
+        }
+    </style>
 </head>
-<body class="light-mode">
-    <div class="container mt-5">
-        <header class="text-center mb-5">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="/">RCC Survival Predictor</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/#about">About</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/#contact">Contact</a>
-                            </li>
-                        </ul>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ url_for('static', filename='hospital.png') }}" width="70" height="70" class="d-inline-block align-top me-2" alt="hospital.jpg">
+                <span class="fs-4 fw-bold">RCC ImmunoPredict</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5" role="main">
+        <div class="card p-4 shadow animate__animated animate__fadeIn">
+            <h1 class="text-center mb-4">RCC Survival Prediction Result</h1>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h2 class="card-title">Predicted Overall Survival</h2>
+                            <p class="display-4 text-primary">{{ prediction }} months</p>
+                            <p class="lead">Description: <strong>{{ os_description }}</strong></p>
+                        </div>
                     </div>
                 </div>
-            </nav>
-            <div class="btn-group mb-3" role="group" aria-label="Toggle color mode">
-                <input type="radio" class="btn-check" name="color-mode" id="light-mode" autocomplete="off" checked>
-                <label class="btn btn-outline-primary" for="light-mode">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sun" viewBox="0 0 16 16">
-                        <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
-                    </svg>
-                    Light Mode
-                </label>
-                <input type="radio" class="btn-check" name="color-mode" id="dark-mode" autocomplete="off">
-                <label class="btn btn-outline-primary" for="dark-mode">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon-stars" viewBox="0 0 16 16">
-                        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278zM4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.162c-.337.042-.68.063-1.029.063-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286z"/>
-                        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
-                    </svg>
-                    Dark Mode
-                </label>
-            </div>
-        </header>
-        
-        <main>
-            <div class="card p-4 shadow animate__animated animate__fadeIn">
-                <h1 class="text-center mb-4">RCC Survival Prediction Result</h1>
-                <div class="result-info">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h2 class="mt-3">Predicted OS (months):</h2>
-                            <p class="lead"><strong>{{ prediction }}</strong></p>
-                            <h3 class="mt-2">Description:</h3>
-                            <p><strong>{{ os_description }}</strong></p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3 class="mt-2">Model Performance:</h3>
-                            <ul class="list-unstyled">
-                                <li>Mean Absolute Error: <strong>{{ mae }}</strong></li>
-                                <li>R-Squared: <strong>{{ r2 }}</strong></li>
-                                <li>Mean Squared Error: <strong>{{ mse }}</strong></li>
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h2 class="card-title">Model Performance</h2>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Total Cases
+                                    <span class="badge bg-primary rounded-pill">{{ total_cases }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Mean Squared Error (MSE)
+                                    <span class="badge bg-primary rounded-pill">{{ mse }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Mean Absolute Error (MAE)
+                                    <span class="badge bg-primary rounded-pill">{{ mae }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    R-squared (R²)
+                                    <span class="badge bg-primary rounded-pill">{{ r2 }}</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <h3 class="text-center">Visualization:</h3>
-                            <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid mx-auto d-block mt-3" alt="RCC Survival Prediction Visualization">
-                        </div>
-                    </div>
                 </div>
             </div>
-            <div class="text-center mt-4">
-                <a href="/" class="btn btn-secondary me-2">Back to Home</a>
-                <a href="/predict" class="btn btn-primary me-2">Predict Another</a>
-                <a href="/export" class="btn btn-info">Export Predictions</a>
+            
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h2 class="text-center mb-3">Visualization</h2>
+                    <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid mx-auto d-block" alt="RCC Survival Prediction Visualization">
+                </div>
             </div>
-        </main>
+            
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h2 class="text-center mb-3">Interpretation</h2>
+                    <p class="lead">
+                        The model predicts an overall survival of <strong>{{ prediction }} months</strong> for the given input parameters. 
+                        This prediction is classified as <strong>"{{ os_description }}"</strong> in terms of prognosis.
+                    </p>
+                    <p>
+                        Please note that this prediction is based on statistical models and should be interpreted in conjunction with clinical expertise and other relevant patient information.
+                    </p>
+                </div>
+            </div>
+        </div>
         
-        <footer class="mt-5 text-center">
-            <p>&copy; 2024 RCC Survival Predictor. All rights reserved.</p>
-        </footer>
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-secondary me-2">Back to Home</a>
+            <a href="/predict" class="btn btn-primary me-2">Make Another Prediction</a>
+            <a href="/export" class="btn btn-info">Export Predictions</a>
+        </div>
     </div>
 
+    <footer class="footer text-center text-lg-start mt-5">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2024 RCC ImmunoPredict. All rights reserved.
+        </div>
+    </footer>
+
+    <button class="floating-button" id="modeToggle"><i class="fas fa-adjust"></i> Toggle Dark Mode</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        function setColorMode(mode) {
+            document.body.classList.remove('light-mode', 'dark-mode');
+            document.body.classList.add(mode + '-mode');
+            localStorage.setItem('colorMode', mode);
+        }
+
+        document.getElementById('modeToggle').addEventListener('click', function() {
+            const currentMode = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
+            setColorMode(currentMode);
+        });
+
+        // Set initial color mode based on user's preference
+        const savedMode = localStorage.getItem('colorMode') || 'light';
+        setColorMode(savedMode);
+
         document.addEventListener('DOMContentLoaded', function() {
-            const body = document.body;
-            const lightModeBtn = document.getElementById('light-mode');
-            const darkModeBtn = document.getElementById('dark-mode');
-
-            function setColorMode(mode) {
-                if (mode === 'dark') {
-                    body.classList.add('dark-mode');
-                    body.classList.remove('light-mode');
-                    darkModeBtn.checked = true;
-                } else {
-                    body.classList.add('light-mode');
-                    body.classList.remove('dark-mode');
-                    lightModeBtn.checked = true;
-                }
-            }
-
-            
-            const savedMode = localStorage.getItem('colorMode');
-            if (savedMode) {
-                setColorMode(savedMode);
-            }
-
-            
-            lightModeBtn.addEventListener('change', function() {
-                setColorMode('light');
-                localStorage.setItem('colorMode', 'light');
-            });
-
-            darkModeBtn.addEventListener('change', function() {
-                setColorMode('dark');
-                localStorage.setItem('colorMode', 'dark');
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('animate__animated', 'animate__fadeInUp');
+                }, index * 200);
             });
         });
     </script>

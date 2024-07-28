@@ -3,255 +3,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCC Survival Predictor - Prediction</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #17a2b8;
+            --light-bg: #ffffff;
+            --dark-bg: #121212;
+            --light-text: #000000;
+            --dark-text: #ffffff;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: var(--dark-bg) !important;
+            color: var(--dark-text) !important;
+        }
+        .navbar {
+            background-color: var(--light-bg) !important;
+            color: var(--light-text) !important;
+        }
+        .navbar-dark .navbar-nav .nav-link {
+            color: var(--light-text) !important;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--light-text) !important;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            opacity: 0.2;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: rgb(255, 255, 255);
+            transition: width 0.3s ease-in-out;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .btn-cta {
+            background-color: var(--secondary-color);
+            border: none;
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .section {
+            padding: 80px 0;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+        }
+        .dark-mode .navbar, .dark-mode .footer {
+            background-color: var(--dark-bg) !important;
+        }
+        .dark-mode .card {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .floating-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        h1, h2, h5 {
+            font-family: 'Arial Black', sans-serif;
+        }
+        p, a, .btn {
+            font-size: 1rem;
+        }
+        .navbar-brand img {
+            width: 70px;
+            height: 70px;
+        }
+    </style>
 </head>
-<body class="light-mode">
-    <div class="container-fluid p-0">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-            <div class="container">
-                <a class="navbar-brand" href="/">
-                    <img src="{{ url_for('static', filename='hospital.jpg') }}" alt="RCC Logo" width="30" height="30" class="d-inline-block align-top me-2">
-                    RCC Survival Predictor
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/#about">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/#features">Features</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/#contact">Contact</a>
-                        </li>
-                    </ul>
-                </div>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="{{ url_for('static', filename='hospital.png') }}" width="70" height="70" class="d-inline-block align-top me-2" alt="hospital.jpg">
+                <span class="fs-4 fw-bold">RCC ImmunoPredict</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#contact">Contact</a>
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <main class="container mt-5">
-            <div class="card p-4 shadow animate__animated animate__fadeIn">
-                <h1 class="text-center mb-4">Predict RCC Overall Survival</h1>
-                <form action="/predict" method="post" class="needs-validation" novalidate>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="age" class="form-label">Age:</label>
-                            <input type="number" class="form-control" id="age" name="age" required>
-                            <div class="form-text">Enter the age of the patient in years.</div>
-                            <div class="invalid-feedback">Please provide a valid age.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="sex" class="form-label">Sex:</label>
-                            <select class="form-select" id="sex" name="sex" required>
-                                <option value="">Choose...</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid sex.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="race" class="form-label">Race:</label>
-                            <select class="form-select" id="race" name="race" required>
-                                <option value="">Choose...</option>
-                                <option value="white">White</option>
-                                <option value="black">Black</option>
-                                <option value="asian">Asian</option>
-                                <option value="other">Other</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid race.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="ethnicity" class="form-label">Ethnicity:</label>
-                            <select class="form-select" id="ethnicity" name="ethnicity" required>
-                                <option value="">Choose...</option>
-                                <option value="hispanic">Hispanic</option>
-                                <option value="non-hispanic">Non-Hispanic</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid ethnicity.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="facility" class="form-label">Facility:</label>
-                            <select class="form-select" id="facility" name="facility" required>
-                                <option value="">Choose...</option>
-                                <option value="Community Cancer Program">Community Cancer Program</option>
-                                <option value="Comprehensive Community Cancer Program">Comprehensive Community Cancer Program</option>
-                                <option value="Academic/Research Program">Academic/Research Program</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid facility.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="grade" class="form-label">Grade:</label>
-                            <select class="form-select" id="grade" name="grade" required>
-                                <option value="">Choose...</option>
-                                <option value="Low grade">Low grade</option>
-                                <option value="Intermediate grade">Intermediate grade</option>
-                                <option value="High grade">High grade</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid grade.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="charlson_deyo_score" class="form-label">Charlson-Deyo Score:</label>
-                            <select class="form-select" id="charlson_deyo_score" name="charlson_deyo_score" required>
-                                <option value="">Choose...</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid Charlson-Deyo Score.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="insurance_status" class="form-label">Insurance Status:</label>
-                            <select class="form-select" id="insurance_status" name="insurance_status" required>
-                                <option value="">Choose...</option>
-                                <option value="Insured">Insured</option>
-                                <option value="Uninsured">Uninsured</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid insurance status.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="income" class="form-label">Income:</label>
-                            <input type="number" class="form-control" id="income" name="income" required>
-                            <div class="form-text">Enter the income of the patient.</div>
-                            <div class="invalid-feedback">Please provide a valid income.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="laterality" class="form-label">Laterality:</label>
-                            <select class="form-select" id="laterality" name="laterality" required>
-                                <option value="">Choose...</option>
-                                <option value="Right">Right</option>
-                                <option value="Left">Left</option>
-                                <option value="Bilateral">Bilateral</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid laterality.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="regional_nodes_positive" class="form-label">Regional Nodes Positive:</label>
-                            <input type="number" class="form-control" id="regional_nodes_positive" name="regional_nodes_positive" required>
-                            <div class="form-text">Enter the number of regional nodes positive.</div>
-                            <div class="invalid-feedback">Please provide a valid number of regional nodes positive.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="regional_nodes_examined" class="form-label">Regional Nodes Examined:</label>
-                            <input type="number" class="form-control" id="regional_nodes_examined" name="regional_nodes_examined" required>
-                            <div class="form-text">Enter the number of regional nodes examined.</div>
-                            <div class="invalid-feedback">Please provide a valid number of regional nodes examined.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="lymph_vascular_invasion" class="form-label">Lymph Vascular Invasion:</label>
-                            <select class="form-select" id="lymph_vascular_invasion" name="lymph_vascular_invasion" required>
-                                <option value="">Choose...</option>
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid option.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="surgery" class="form-label">Surgery:</label>
-                            <select class="form-select" id="surgery" name="surgery" required>
-                                <option value="">Choose...</option>
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid option.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="radiotherapy" class="form-label">Radiotherapy:</label>
-                            <select class="form-select" id="radiotherapy" name="radiotherapy" required>
-                                <option value="">Choose...</option>
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid option.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="puf_vital_status" class="form-label">PUF Vital Status:</label>
-                            <select class="form-select" id="puf_vital_status" name="puf_vital_status" required>
-                                <option value="">Choose...</option>
-                                <option value="Alive">Alive</option>
-                                <option value="Deceased">Deceased</option>
-                            </select>
-                            <div class="invalid-feedback">Please select a valid PUF vital status.</div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100 mt-4">
-                        <i class="fas fa-calculator me-2"></i>Predict RCC Survival
-                    </button>
-                    <div id="loading" class="text-center mt-3" style="display:none;">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                </form>
+    <div class="container mt-5" role="main">
+        <div class="card p-4 shadow animate__animated animate__fadeIn">
+            <h1 class="text-center mb-4">Predict RCC Overall Survival</h1>
+            
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
             </div>
-        </main>
-        
-        <footer class="bg-dark text-white text-center py-3 mt-5">
-            <p>&copy; 2024 RCC Survival Predictor. All rights reserved.</p>
-        </footer>
+            {% endif %}
+            
+            <form method="POST" action="{{ url_for('predict') }}" id="predictionForm">
+                <div class="row g-3">
+                    <!-- Age -->
+                    <div class="col-md-6">
+                        <label for="age" class="form-label">Age:</label>
+                        <input type="number" class="form-control" id="age" name="age" required min="0" max="120">
+                        <div class="form-text">Enter the age of the patient in years.</div>
+                    </div>
+
+                    <!-- Sex -->
+                    <div class="col-md-6">
+                        <label for="sex" class="form-label">Sex:</label>
+                        <select class="form-select" id="sex" name="sex" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <!-- Race -->
+                    <div class="col-md-6">
+                        <label for="race" class="form-label">Race:</label>
+                        <select class="form-select" id="race" name="race" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="white">White</option>
+                            <option value="black">Black</option>
+                            <option value="asian">Asian</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Ethnicity -->
+                    <div class="col-md-6">
+                        <label for="ethnicity" class="form-label">Ethnicity:</label>
+                        <select class="form-select" id="ethnicity" name="ethnicity" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="hispanic">Hispanic</option>
+                            <option value="non-hispanic">Non-Hispanic</option>
+                        </select>
+                    </div>
+
+                    <!-- Facility -->
+                    <div class="col-md-6">
+                        <label for="facility" class="form-label">Facility:</label>
+                        <select class="form-select" id="facility" name="facility" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="community cancer program">Community Cancer Program</option>
+                            <option value="comprehensive community cancer program">Comprehensive Community Cancer Program</option>
+                            <option value="academic/research program">Academic/Research Program</option>
+                        </select>
+                    </div>
+
+                    <!-- Grade -->
+                    <div class="col-md-6">
+                        <label for="grade" class="form-label">Grade:</label>
+                        <select class="form-select" id="grade" name="grade" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="low grade">Low grade</option>
+                            <option value="intermediate grade">Intermediate grade</option>
+                            <option value="high grade">High grade</option>
+                        </select>
+                    </div>
+
+                    <!-- Charlson-Deyo Score -->
+                    <div class="col-md-6">
+                        <label for="charlson-deyo score" class="form-label">Charlson-Deyo Score:</label>
+                        <select class="form-select" id="charlson-deyo score" name="charlson-deyo score" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+
+                    <!-- Insurance Status -->
+                    <div class="col-md-6">
+                        <label for="insurance_status" class="form-label">Insurance Status:</label>
+                        <select class="form-select" id="insurance_status" name="insurance_status" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="insured">Insured</option>
+                            <option value="uninsured">Uninsured</option>
+                        </select>
+                    </div>
+
+                    <!-- Income -->
+                    <div class="col-md-6">
+                        <label for="income" class="form-label">Income:</label>
+                        <input type="number" class="form-control" id="income" name="income" required min="0">
+                        <div class="form-text">Enter the annual income of the patient.</div>
+                    </div>
+
+                    <!-- Laterality -->
+                    <div class="col-md-6">
+                        <label for="laterality" class="form-label">Laterality:</label>
+                        <select class="form-select" id="laterality" name="laterality" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="right">Right</option>
+                            <option value="left">Left</option>
+                            <option value="bilateral">Bilateral</option>
+                        </select>
+                    </div>
+
+                    <!-- Regional Nodes Positive -->
+                    <div class="col-md-6">
+                        <label for="regional_nodes_positive" class="form-label">Regional Nodes Positive:</label>
+                        <input type="number" class="form-control" id="regional_nodes_positive" name="regional_nodes_positive" required min="0">
+                        <div class="form-text">Enter the number of regional nodes positive.</div>
+                    </div>
+
+                    <!-- Regional Nodes Examined -->
+                    <div class="col-md-6">
+                        <label for="regional_nodes_examined" class="form-label">Regional Nodes Examined:</label>
+                        <input type="number" class="form-control" id="regional_nodes_examined" name="regional_nodes_examined" required min="0">
+                        <div class="form-text">Enter the number of regional nodes examined.</div>
+                    </div>
+
+                    <!-- Lymph Vascular Invasion -->
+                    <div class="col-md-6">
+                        <label for="lymph_vascular_invasion" class="form-label">Lymph Vascular Invasion:</label>
+                        <select class="form-select" id="lymph_vascular_invasion" name="lymph_vascular_invasion" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+
+                    <!-- Surgery -->
+                    <div class="col-md-6">
+                        <label for="surgery" class="form-label">Surgery:</label>
+                        <select class="form-select" id="surgery" name="surgery" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+
+                    <!-- Radiotherapy -->
+                    <div class="col-md-6">
+                        <label for="radiotherapy" class="form-label">Radiotherapy:</label>
+                        <select class="form-select" id="radiotherapy" name="radiotherapy" required>
+                            <option value="" disabled selected>Choose...</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary" id="predictButton">Predict RCC Survival</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <button id="toggle-mode" class="btn btn-outline-primary position-fixed bottom-0 end-0 m-3">
-        <i class="fas fa-moon"></i>
-        <span class="ms-2">Switch to Dark Mode</span>
-    </button>
+    <footer class="footer text-center text-lg-start mt-5">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2024 RCC ImmunoPredict. All rights reserved.
+        </div>
+    </footer>
 
+    <button class="floating-button" id="modeToggle"><i class="fas fa-adjust"></i> Toggle Dark Mode</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const body = document.body;
-            const toggleBtn = document.getElementById('toggle-mode');
-            const icon = toggleBtn.querySelector('i');
-            const text = toggleBtn.querySelector('span');
+            const form = document.getElementById('predictionForm');
+            const submitButton = document.getElementById('predictButton');
+            const modeToggle = document.getElementById('modeToggle');
 
-            function setColorMode(mode) {
-                if (mode === 'dark') {
-                    body.classList.add('dark-mode');
-                    body.classList.remove('light-mode');
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                    text.textContent = 'Switch to Light Mode';
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                const requiredFields = form.querySelectorAll('[required]');
+                
+                requiredFields.forEach(field => {
+                    if (!field.value) {
+                        isValid = false;
+                        field.classList.add('is-invalid');
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Please fill in all required fields.');
                 } else {
-                    body.classList.add('light-mode');
-                    body.classList.remove('dark-mode');
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                    text.textContent = 'Switch to Dark Mode';
+                    submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Predicting...';
+                    submitButton.disabled = true;
                 }
-            }
-
-            
-            const savedMode = localStorage.getItem('colorMode');
-            if (savedMode) {
-                setColorMode(savedMode);
-            }
-
-            
-            toggleBtn.addEventListener('click', function() {
-                const newMode = body.classList.contains('light-mode') ? 'dark' : 'light';
-                setColorMode(newMode);
-                localStorage.setItem('colorMode', newMode);
             });
 
-            
-            const forms = document.querySelectorAll('.needs-validation');
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
+            // Add event listeners for real-time validation
+            requiredFields.forEach(field => {
+                field.addEventListener('blur', function() {
+                    if (!this.value) {
+                        this.classList.add('is-invalid');
                     } else {
-                        document.getElementById('loading').style.display = 'block';
+                        this.classList.remove('is-invalid');
                     }
-                    form.classList.add('was-validated');
-                }, false);
+                });
+            });
+
+            modeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
             });
         });
     </script>
